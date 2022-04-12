@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">M7019E Demo App</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_popular_movies">Popular Movies</string>
+    <string name="action_top_rated_movies">Top Rated Movies</string>
+    <string name="action_saved_movies">Saved Movies</string>
     <!-- Strings used for fragments for navigation -->
     <string name="movie_list_label">Movie List</string>
     <string name="movie_detail_label">Movie Detail</string>

@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.ltu.m7019edemoapp.database.MovieDatabase
+import com.ltu.m7019edemoapp.database.MovieDatabaseDao
 import com.ltu.m7019edemoapp.database.Movies
 import com.ltu.m7019edemoapp.databinding.FragmentMovieListBinding
 import com.ltu.m7019edemoapp.databinding.MovieListItemBinding
@@ -30,6 +32,7 @@ class MovieListFragment : Fragment() {
 
     private lateinit var viewModel: MovieListViewModel
     private lateinit var viewModelFactory: MovieListViewModelFactory
+    private lateinit var movieDatabaseDao: MovieDatabaseDao
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +43,9 @@ class MovieListFragment : Fragment() {
         //val movies = Movies()
 
         val application = requireNotNull(this.activity).application
+        movieDatabaseDao = MovieDatabase.getDatabase(application).movieDatabaseDao()
 
-        viewModelFactory = MovieListViewModelFactory(application)
+        viewModelFactory = MovieListViewModelFactory(movieDatabaseDao, application)
         viewModel =ViewModelProvider(this, viewModelFactory).get(MovieListViewModel::class.java)
 
         viewModel.movies.observe(viewLifecycleOwner) { movieList ->
@@ -75,10 +79,12 @@ class MovieListFragment : Fragment() {
                 true
             }
             R.id.action_top_rated_movies -> {
+                viewModel.addMovie()
                 Timber.i("Top Rated Movies Clicked")
                 true
             }
             R.id.action_saved_movies -> {
+                viewModel.getSavedMovies()
                 Timber.i("Saved Movies Clicked")
                 true
             }

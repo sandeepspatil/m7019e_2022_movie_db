@@ -4,10 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.ltu.m7019edemoapp.database.MovieDatabaseDao
 import com.ltu.m7019edemoapp.database.Movies
 import com.ltu.m7019edemoapp.model.Movie
+import kotlinx.coroutines.launch
 
-class MovieListViewModel(application: Application) : AndroidViewModel(application) {
+class MovieListViewModel(private val movieDatabaseDao: MovieDatabaseDao, application: Application) : AndroidViewModel(application) {
 
     private val _movies = MutableLiveData<List<Movie>>()
     val movies: LiveData<List<Movie>>
@@ -17,5 +20,17 @@ class MovieListViewModel(application: Application) : AndroidViewModel(applicatio
 
     init {
         _movies.postValue(Movies().list)
+    }
+
+    fun getSavedMovies() {
+        viewModelScope.launch {
+            _movies.postValue(movieDatabaseDao.getAllMovies())
+        }
+    }
+
+    fun addMovie() {
+        viewModelScope.launch {
+            movies.value?.let { movieDatabaseDao.insert(it[0]) }
+        }
     }
 }

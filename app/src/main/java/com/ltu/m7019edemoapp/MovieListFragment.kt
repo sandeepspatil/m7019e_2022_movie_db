@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.ltu.m7019e2022prep.adapter.MovieListAdapter
+import com.ltu.m7019e2022prep.adapter.MovieListClickListener
 import com.ltu.m7019edemoapp.database.MovieDatabase
 import com.ltu.m7019edemoapp.database.MovieDatabaseDao
 import com.ltu.m7019edemoapp.database.Movies
@@ -48,14 +50,24 @@ class MovieListFragment : Fragment() {
         viewModelFactory = MovieListViewModelFactory(movieDatabaseDao, application)
         viewModel =ViewModelProvider(this, viewModelFactory).get(MovieListViewModel::class.java)
 
+        val movieListAdapter = MovieListAdapter(
+            MovieListClickListener { movie ->
+                viewModel.onMovieListItemClicked(movie)
+            })
+        binding.movieListRecycleView.adapter = movieListAdapter
+
         viewModel.movies.observe(viewLifecycleOwner) { movieList ->
-            movieList.forEach { movie ->
-                val movieListItemBinding: MovieListItemBinding = DataBindingUtil.inflate(inflater, R.layout.movie_list_item, container, false)
-                movieListItemBinding.movie = movie
-                movieListItemBinding.root.setOnClickListener {
-                    this.findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie))
-                }
-                binding.movieListLinearLayout.addView(movieListItemBinding.root)
+            movieList?.let {
+                movieListAdapter.submitList(movieList)
+            }
+        }
+
+        viewModel.navigateToMovieDetail.observe(viewLifecycleOwner) { movie ->
+            movie?.let {
+                this.findNavController().navigate(
+                    MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie)
+                )
+                viewModel.onMovieDetailNavigated()
             }
         }
 

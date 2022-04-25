@@ -16,6 +16,7 @@ import com.ltu.m7019edemoapp.database.MovieDatabaseDao
 import com.ltu.m7019edemoapp.database.Movies
 import com.ltu.m7019edemoapp.databinding.FragmentMovieListBinding
 import com.ltu.m7019edemoapp.databinding.MovieListItemBinding
+import com.ltu.m7019edemoapp.network.DataFetchStatus
 import com.ltu.m7019edemoapp.viewmodel.MovieListViewModel
 import com.ltu.m7019edemoapp.viewmodel.MovieListViewModelFactory
 import timber.log.Timber
@@ -56,6 +57,25 @@ class MovieListFragment : Fragment() {
             })
         binding.movieListRecycleView.adapter = movieListAdapter
 
+        viewModel.dataFetchStatus.observe(viewLifecycleOwner) { status ->
+            status?.let {
+                when(status) {
+                    DataFetchStatus.LOADING -> {
+                        binding.statusImage.visibility = View.VISIBLE
+                        binding.statusImage.setImageResource(R.drawable.loading_animation)
+                    }
+                    DataFetchStatus.ERROR -> {
+                        binding.statusImage.visibility = View.VISIBLE
+                        binding.statusImage.setImageResource(R.drawable.ic_connection_error)
+                    }
+                    DataFetchStatus.DONE -> {
+                        binding.statusImage.visibility = View.GONE
+                    }
+                }
+            }
+
+        }
+
         viewModel.movies.observe(viewLifecycleOwner) { movieList ->
             movieList?.let {
                 movieListAdapter.submitList(movieList)
@@ -88,10 +108,11 @@ class MovieListFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_popular_movies -> {
                 Timber.i("Popular Movies Clicked")
+                viewModel.getPopularMovies()
                 true
             }
             R.id.action_top_rated_movies -> {
-                viewModel.addMovie()
+                viewModel.getTopRatedMovies()
                 Timber.i("Top Rated Movies Clicked")
                 true
             }

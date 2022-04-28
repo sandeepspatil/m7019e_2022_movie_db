@@ -24,7 +24,7 @@ data class Movie(
 
     @ColumnInfo(name = "banner_path")
     @Json(name = "backdrop_path")
-    var bannerPath: String,
+    var bannerPath: String?,
 
     @ColumnInfo(name = "release_date")
     @Json(name = "release_date")

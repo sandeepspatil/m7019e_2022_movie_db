@@ -8,6 +8,9 @@
     <string name="movie_detail_label">Movie Detail</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="add_to_db">Add to DB</string>
+    <string name="remove_from_db">Remove from DB</string>
+    <string name="banner_path_desc">Shows image of the movie back drop </string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

@@ -7,6 +7,10 @@
         <variable
             name="movie"
             type="com.ltu.m7019edemoapp.model.Movie" />
+
+        <variable
+            name="viewModel"
+            type="com.ltu.m7019edemoapp.viewmodel.MovieDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +26,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            android:contentDescription="@string/banner_path_desc" />
 
         <TextView
             android:id="@+id/movieDetailTitleTextView"
@@ -44,5 +49,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/saveToDBButtonView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/add_to_db"
+            android:onClick="@{() -> viewModel.onAddToDBButtonClicked(movie)}"
+            app:layout_constraintBottom_toTopOf="@+id/movieDetailToMovieListButtonView"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/removeFromDBButtonView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/remove_from_db"
+            android:onClick="@{ () -> viewModel.onRemoveFromDBButtonClicked(movie)}"
+            app:layout_constraintBottom_toTopOf="@+id/movieDetailToMovieListButtonView"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
